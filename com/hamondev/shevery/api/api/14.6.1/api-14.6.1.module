@@ -1,0 +1,151 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.hamondev.shevery.api",
+    "module": "api",
+    "version": "14.6.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.7.0-rc-2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "aidl",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "shared",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "api-14.6.1.aar",
+          "url": "api-14.6.1.aar",
+          "size": 51733,
+          "sha512": "c700597ac48f4c4b18f60dfbaf0a98aab7ec8a2bac7e440d3d2b9c51b2ef82dac4aa4130de43d47c59914e7795aac07507ea7f5f2c12e02c9d933a958a86f855",
+          "sha256": "b88cffab0ece9711e44544660b43112a08b37eedc2aafbff991620d7180da4ee",
+          "sha1": "74e8270749480897e7f85f20ed55aa56f2ee8cda",
+          "md5": "dbb064498cb78602da11e8c3c6f61245"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.11.0-alpha01"
+          }
+        },
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "aidl",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "shared",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "api-14.6.1.aar",
+          "url": "api-14.6.1.aar",
+          "size": 51733,
+          "sha512": "c700597ac48f4c4b18f60dfbaf0a98aab7ec8a2bac7e440d3d2b9c51b2ef82dac4aa4130de43d47c59914e7795aac07507ea7f5f2c12e02c9d933a958a86f855",
+          "sha256": "b88cffab0ece9711e44544660b43112a08b37eedc2aafbff991620d7180da4ee",
+          "sha1": "74e8270749480897e7f85f20ed55aa56f2ee8cda",
+          "md5": "dbb064498cb78602da11e8c3c6f61245"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "api-14.6.1-sources.jar",
+          "url": "api-14.6.1-sources.jar",
+          "size": 27320,
+          "sha512": "817ad87073ee186e57caf06f8867b83ec857a7045f50c145b113ad3003dc6eb7d03c9b14bd4e869a42fdf91568bf241ed1060edb61cab63101fa7da4fbe02ac5",
+          "sha256": "edcd36fde996e1105fcc831e3a61109c59572c9219bf782e92a52f60a3a98309",
+          "sha1": "13494e10e87c85c6c3b97070d4d898a775936f88",
+          "md5": "ec0909103cf199631c176b54ad296c8a"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "api-14.6.1-javadoc.jar",
+          "url": "api-14.6.1-javadoc.jar",
+          "size": 528875,
+          "sha512": "012e530b718eec22e8a2d6a5fe1ce8bbb605a6e4bc1d89c957f369bb32e9f117c1c1d885e5c5722132b27aa9df324d47c631c25692767a7f80d4bab54ea9b455",
+          "sha256": "83acccaedeb04358b90974d2d496b4ed4d8a717d8614d2f1e60f281399ccd4e3",
+          "sha1": "6c37b7bed45263a107328dfdf348e9f1aaa59dd3",
+          "md5": "a567b8ac3065e5b9d5ed4d2f6889696e"
+        }
+      ]
+    }
+  ]
+}

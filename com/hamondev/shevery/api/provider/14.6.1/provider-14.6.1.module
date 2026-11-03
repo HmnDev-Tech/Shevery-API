@@ -1,0 +1,137 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.hamondev.shevery.api",
+    "module": "provider",
+    "version": "14.6.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.7.0-rc-2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "api",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "provider-14.6.1.aar",
+          "url": "provider-14.6.1.aar",
+          "size": 10453,
+          "sha512": "1b6b04dde0f800ac6ffb25d1515a18e2e42959cbcb3ac2f86523bcd2bd89571afb7dd4c4e902e67aa0064bdb8c64e25d807ab881f87ad7624baed9acfe664a9e",
+          "sha256": "874b3ee78de49f29ce26c372cb3d3990516f669967e921191b1165f212f56bf2",
+          "sha1": "d10d37f7838023841f58e47f4be2b181e121244f",
+          "md5": "e807a4f180c8577f01d106e651ed2b0e"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.11.0-alpha01"
+          }
+        },
+        {
+          "group": "com.hamondev.shevery.api",
+          "module": "api",
+          "version": {
+            "requires": "14.6.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "provider-14.6.1.aar",
+          "url": "provider-14.6.1.aar",
+          "size": 10453,
+          "sha512": "1b6b04dde0f800ac6ffb25d1515a18e2e42959cbcb3ac2f86523bcd2bd89571afb7dd4c4e902e67aa0064bdb8c64e25d807ab881f87ad7624baed9acfe664a9e",
+          "sha256": "874b3ee78de49f29ce26c372cb3d3990516f669967e921191b1165f212f56bf2",
+          "sha1": "d10d37f7838023841f58e47f4be2b181e121244f",
+          "md5": "e807a4f180c8577f01d106e651ed2b0e"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "provider-14.6.1-sources.jar",
+          "url": "provider-14.6.1-sources.jar",
+          "size": 5814,
+          "sha512": "a8ac05a6e34bd3d048c748b0aa42ef48fc85ed1a7004af3fb3690de58cf7dd005f54e95934ef938a12d455ae1b39cb208fa017d639ffce303e78e264330b6419",
+          "sha256": "12f230276df9e010ab51f15b47c9f781a3c25f18c5f489be32c65123e7c27514",
+          "sha1": "82f3db242aa10905341d43318af5f06c79d3d2bc",
+          "md5": "35f028c1659a106994375c473cfb2c39"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "provider-14.6.1-javadoc.jar",
+          "url": "provider-14.6.1-javadoc.jar",
+          "size": 433694,
+          "sha512": "45b6c42ba47b208a5678a6687466473b0c389db26e1850c2f470fc217cd98f1daee4ac10fbe30a568ce1a001329924515f2312f73de94f10e8043af1c34c98c2",
+          "sha256": "bfc03d766dce5ff7f13b15796983ff93780c5d2be8e55376a61608350369d72f",
+          "sha1": "aa2fed81870541997ce75cee15cd338102a1ad07",
+          "md5": "54b187953de45639982f02b5f91bcd1c"
+        }
+      ]
+    }
+  ]
+}
