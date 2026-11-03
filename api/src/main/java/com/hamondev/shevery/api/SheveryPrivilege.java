@@ -13,6 +13,7 @@ import static rikka.shizuku.ShizukuApiConstants.REQUEST_PERMISSION_REPLY_ALLOWED
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -236,6 +237,11 @@ public final class SheveryPrivilege {
         if (pingBinder()) {
             return true;
         }
+        IBinder existingShizukuBinder = Shizuku.getBinder();
+        if (existingShizukuBinder != null && existingShizukuBinder.pingBinder()) {
+            onBinderReceived(existingShizukuBinder, context.getPackageName());
+            return true;
+        }
         final String pkg = context.getPackageName();
         final String[] authorities = new String[]{
                 SheveryApiConstants.MANAGER_PROVIDER_AUTHORITY,
@@ -247,8 +253,12 @@ public final class SheveryPrivilege {
             final String expectedPackage = authority.equals(pkg + SheveryApiConstants.PROVIDER_SUFFIX)
                     ? pkg
                     : SheveryApiConstants.MANAGER_APPLICATION_ID;
-            ProviderInfo providerInfo = context.getPackageManager().resolveContentProvider(authority, 0);
-            if (providerInfo == null || !expectedPackage.equals(providerInfo.packageName)) {
+            ProviderInfo providerInfo = null;
+            try {
+                providerInfo = context.getPackageManager().resolveContentProvider(authority, 0);
+            } catch (Throwable ignored) {
+            }
+            if (providerInfo != null && !expectedPackage.equals(providerInfo.packageName)) {
                 continue;
             }
             try {
@@ -281,6 +291,19 @@ public final class SheveryPrivilege {
             } catch (Throwable ignored) {
             }
         }
+
+        try {
+            Intent requestIntent = new Intent(SheveryApiConstants.ACTION_REQUEST_BINDER)
+                    .setPackage(SheveryApiConstants.MANAGER_APPLICATION_ID);
+            context.sendBroadcast(requestIntent);
+        } catch (Throwable ignored) {
+        }
+        try {
+            Intent legacyIntent = new Intent(SheveryApiConstants.LEGACY_ACTION_REQUEST_BINDER);
+            context.sendBroadcast(legacyIntent);
+        } catch (Throwable ignored) {
+        }
+
         return pingBinder();
     }
 
