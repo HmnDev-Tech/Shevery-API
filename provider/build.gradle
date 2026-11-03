@@ -28,6 +28,6 @@ dependencies {
 
 ext {
     publishLibrary = true
-    POM_NAME = "Shizuku API - provider"
-    POM_DESCRIPTION = "Content Provider for Shizuku."
+    POM_NAME = "Shevery API - provider"
+    POM_DESCRIPTION = "ContentProvider integration for Shevery API."
 }

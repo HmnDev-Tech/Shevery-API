@@ -20,15 +20,16 @@ subprojects {
         } else {
             group = "${groupIdBase}.${project.parent.name}"
         }
-        version = api_version_name
+        def resolvedVersion = (project.findProperty('publishVersion') ?: api_version_name).toString()
+        version = resolvedVersion
         println("${project.displayName}: ${group}:${project.name}:${version}")
 
         publishing {
             publications {
                 mavenJava(MavenPublication) {
-                    group project.group
-                    artifactId project.name
-                    version api_version_name
+                    groupId = project.group.toString()
+                    artifactId = project.name
+                    version = resolvedVersion
                     afterEvaluate {
                         from components.release
                     }
@@ -44,12 +45,14 @@ subprojects {
                         }
                         developers {
                             developer {
+                                id = POM_DEVELOPER_ID
                                 name = POM_DEVELOPER_NAME
                                 url = POM_DEVELOPER_URL
                             }
                         }
                         scm {
                             connection = POM_SCM_CONNECTION
+                            developerConnection = POM_SCM_DEV_CONNECTION
                             url = POM_SCM_URL
                         }
                     }
@@ -57,8 +60,20 @@ subprojects {
             }
             repositories {
                 maven {
-                    name 'ossrh'
-                    url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    name = 'localRepo'
+                    url = rootProject.layout.buildDirectory.dir('repo')
+                }
+                maven {
+                    name = 'GitHubPackages'
+                    url = uri('https://maven.pkg.github.com/HmnDev-Tech/Shevery-API')
+                    credentials {
+                        username = (project.findProperty('gpr.user') ?: System.getenv('GITHUB_ACTOR') ?: 'HmnDev-Tech').toString()
+                        password = (project.findProperty('gpr.key') ?: System.getenv('GITHUB_TOKEN') ?: '').toString()
+                    }
+                }
+                maven {
+                    name = 'ossrh'
+                    url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
                     credentials(PasswordCredentials)
                 }
             }

@@ -26,6 +26,20 @@
 
 ### 1. Gradle Dependencies
 
+Add the Shevery-API Maven repository in `settings.gradle` (or `settings.gradle.kts`):
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://raw.githubusercontent.com/HmnDev-Tech/Shevery-API/maven") }
+    }
+}
+```
+
+Then add the dependencies in your module's `build.gradle` (or `build.gradle.kts`):
+
 ```groovy
 dependencies {
     implementation "com.hamondev.shevery.api:api:14.6.2"
