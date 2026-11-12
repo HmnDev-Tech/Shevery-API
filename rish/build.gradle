@@ -2,18 +2,53 @@ plugins {
     id('com.android.library')
 }
 
-android {
-    namespace 'rikka.rish'
-    defaultConfig {
-        externalNativeBuild {
-            cmake {
-                arguments '-DANDROID_STL=none'
-            }
+def findNdkDir = {
+    def ndkHome = System.getenv("ANDROID_NDK_HOME") ?: System.getenv("ANDROID_NDK_ROOT")
+    if (ndkHome && file(ndkHome).isDirectory()) return file(ndkHome)
+    def sdkHome = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    if (sdkHome) {
+        def ndkDir = file("${sdkHome}/ndk/29.0.14206865")
+        if (ndkDir.isDirectory()) return ndkDir
+        def ndkParent = file("${sdkHome}/ndk")
+        if (ndkParent.isDirectory()) {
+            def subdirs = ndkParent.listFiles()
+            if (subdirs && subdirs.length > 0) return subdirs[0]
         }
     }
-    buildFeatures {
-        prefab true
+    return null
+}
+
+def findCargo = {
+    def userHome = System.getProperty("user.home")
+    def candidates = [
+            "cargo",
+            "${userHome}/.cargo/bin/cargo",
+            "${userHome}/.local/bin/cargo"
+    ]
+    for (cand in candidates) {
+        if (cand == "cargo") {
+            try {
+                def p = "which cargo".execute()
+                if (p.waitFor() == 0) return cand
+            } catch (Exception ignored) {}
+        } else if (file(cand).canExecute()) {
+            return cand
+        }
     }
+    return "cargo"
+}
+
+def rustJniLibsDir = file("$buildDir/intermediates/rustJniLibs")
+
+android {
+    namespace 'rikka.rish'
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs += [rustJniLibsDir]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,19 +58,70 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
-    externalNativeBuild {
-        cmake {
-            path 'src/main/cpp/CMakeLists.txt'
-            version "3.22.1"
+}
+
+def buildRustRish = tasks.register("buildRustRish") {
+    inputs.dir(rootProject.file("native/rish/src"))
+    inputs.file(rootProject.file("native/rish/Cargo.toml"))
+    inputs.file(rootProject.file("native/Cargo.toml"))
+    if (rootProject.file("native/Cargo.lock").exists()) {
+        inputs.file(rootProject.file("native/Cargo.lock"))
+    }
+    outputs.dir(rustJniLibsDir)
+
+    doLast {
+        def nativeDir = rootProject.file("native")
+        def userHome = System.getProperty("user.home")
+        def cargoBin = "${userHome}/.cargo/bin"
+        def localBin = "${userHome}/.local/bin"
+        def currentPath = System.getenv("PATH") ?: ""
+        def envMap = [
+                "PATH": "${cargoBin}:${localBin}:${currentPath}"
+        ]
+        def ndkDir = findNdkDir()
+        if (ndkDir != null) {
+            envMap["ANDROID_NDK_HOME"] = ndkDir.absolutePath
+        }
+
+        rustJniLibsDir.mkdirs()
+
+        def cmd = [
+                findCargo().toString(),
+                "ndk",
+                "-t", "arm64-v8a",
+                "-t", "armeabi-v7a",
+                "-t", "x86",
+                "-t", "x86_64",
+                "-P", "24",
+                "-o", rustJniLibsDir.absolutePath.toString(),
+                "build", "--release", "-p", "rust-rish"
+        ]
+        def pb = new ProcessBuilder(cmd)
+        pb.directory(nativeDir)
+        envMap.each { k, v ->
+            pb.environment().put(k.toString(), v.toString())
+        }
+        pb.redirectErrorStream(true)
+        def process = pb.start()
+        def output = process.inputStream.text
+        int exitCode = process.waitFor()
+        if (exitCode != 0) {
+            throw new GradleException("cargo-ndk build failed with exit code ${exitCode}:\n${output}")
         }
     }
+}
+
+tasks.matching { it.name.startsWith("merge") && it.name.endsWith("JniLibFolders") }.configureEach {
+    dependsOn(buildRustRish)
+}
+tasks.named("preBuild").configure {
+    dependsOn(buildRustRish)
 }
 
 dependencies {
     implementation project(':api')
 
     implementation 'androidx.annotation:annotation:1.11.0-alpha01'
-    implementation 'org.lsposed.libcxx:libcxx:27.0.12077973'
 }
 
 ext {
