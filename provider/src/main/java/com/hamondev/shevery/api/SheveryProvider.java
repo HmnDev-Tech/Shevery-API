@@ -153,8 +153,6 @@ public class SheveryProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
-        enforceCallingUid(Binder.getCallingUid(), Process.myUid());
-
         if (extras == null) {
             extras = new Bundle();
         }
@@ -162,10 +160,21 @@ public class SheveryProvider extends ContentProvider {
         Bundle reply = new Bundle();
         switch (method) {
             case METHOD_SEND_BINDER: {
+                enforceCallingUid(Binder.getCallingUid(), Process.myUid());
                 handleSendBinder(extras);
                 break;
             }
-            case METHOD_GET_BINDER:
+            case SheveryApiConstants.METHOD_SEND_USER_SERVICE: {
+                enforceCallingUid(Binder.getCallingUid(), Process.myUid());
+                return null;
+            }
+            case METHOD_GET_BINDER: {
+                enforceCallingUid(Binder.getCallingUid(), Process.myUid());
+                if (!handleGetBinder(reply)) {
+                    return null;
+                }
+                break;
+            }
             case METHOD_REQUEST_BINDER: {
                 if (!handleGetBinder(reply)) {
                     return null;
