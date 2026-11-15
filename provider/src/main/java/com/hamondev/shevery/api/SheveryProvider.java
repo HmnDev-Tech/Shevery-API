@@ -9,9 +9,11 @@ import android.content.IntentFilter;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -138,9 +140,21 @@ public class SheveryProvider extends ContentProvider {
         return true;
     }
 
+    public static boolean isTrustedCallingUid(int callingUid, int myUid) {
+        return callingUid == 0 || callingUid == 2000 || callingUid == myUid;
+    }
+
+    public static void enforceCallingUid(int callingUid, int myUid) {
+        if (!isTrustedCallingUid(callingUid, myUid)) {
+            throw new SecurityException("Unauthorized binder delivery from uid=" + callingUid);
+        }
+    }
+
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
+        enforceCallingUid(Binder.getCallingUid(), Process.myUid());
+
         if (extras == null) {
             extras = new Bundle();
         }

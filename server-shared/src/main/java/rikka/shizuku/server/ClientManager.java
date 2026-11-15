@@ -4,10 +4,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import moe.shizuku.server.IShizukuApplication;
+import rikka.hidden.compat.PackageManagerApis;
 import rikka.shizuku.server.util.Logger;
 
 public class ClientManager<ConfigMgr extends ConfigManager> {
@@ -63,9 +65,27 @@ public class ClientManager<ConfigMgr extends ConfigManager> {
         return clientRecord;
     }
 
+    public static void enforcePackageOwnership(int callingUid, String packageName, Collection<String> ownedPackages) {
+        if (packageName == null || packageName.isEmpty()) {
+            throw new SecurityException("Request package must not be empty for uid " + callingUid);
+        }
+        if (ownedPackages == null || !ownedPackages.contains(packageName)) {
+            throw new SecurityException("Request package " + packageName + " does not belong to uid " + callingUid);
+        }
+    }
+
     public ClientRecord addClient(int uid, int pid, IShizukuApplication client, String packageName, int apiVersion) {
-        if (client == null || packageName == null) {
+        if (client == null || packageName == null || packageName.isEmpty()) {
             return null;
+        }
+        try {
+            List<String> packages = PackageManagerApis.getPackagesForUidNoThrow(uid);
+            if (packages != null && !packages.isEmpty()) {
+                enforcePackageOwnership(uid, packageName, packages);
+            }
+        } catch (SecurityException e) {
+            throw e;
+        } catch (Throwable ignored) {
         }
         ClientRecord clientRecord = new ClientRecord(uid, pid, client, packageName, apiVersion);
 
