@@ -23,7 +23,8 @@ android {
 
 dependencies {
     api project(':api')
-    implementation 'androidx.annotation:annotation:1.11.0-alpha01'
+    implementation 'androidx.annotation:annotation:1.11.0'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 ext {

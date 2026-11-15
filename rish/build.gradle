@@ -121,7 +121,7 @@ tasks.named("preBuild").configure {
 dependencies {
     implementation project(':api')
 
-    implementation 'androidx.annotation:annotation:1.11.0-alpha01'
+    implementation 'androidx.annotation:annotation:1.11.0'
 }
 
 ext {

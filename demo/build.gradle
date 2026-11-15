@@ -49,11 +49,11 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.11.0-alpha01'
+    implementation 'androidx.annotation:annotation:1.11.0'
 
     implementation project(':api') // required by Shizuku and Sui
     implementation project(':provider') // required by Shizuku only
 
     compileOnly project(':demo-hidden-api-stub')
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1' // bypass hidden api restriction, https://github.com/LSPosed/AndroidHiddenApiBypass
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.2' // bypass hidden api restriction, https://github.com/LSPosed/AndroidHiddenApiBypass
 }
