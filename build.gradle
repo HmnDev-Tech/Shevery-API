@@ -61,11 +61,13 @@ subprojects {
             repositories {
                 maven {
                     name = 'localRepo'
-                    url = rootProject.layout.buildDirectory.dir('repo')
+                    def repositoryDirectory = System.getenv('MAVEN_REPOSITORY_DIR')
+                    url = repositoryDirectory ? rootProject.file(repositoryDirectory) : rootProject.layout.buildDirectory.dir('repo')
                 }
                 maven {
                     name = 'GitHubPackages'
-                    url = uri('https://maven.pkg.github.com/HmnDev-Tech/Shevery-API')
+                    def repository = System.getenv('GITHUB_REPOSITORY') ?: 'HmnDev-Tech/Shevery-API'
+                    url = uri("https://maven.pkg.github.com/${repository}")
                     credentials {
                         username = (project.findProperty('gpr.user') ?: System.getenv('GITHUB_ACTOR') ?: 'HmnDev-Tech').toString()
                         password = (project.findProperty('gpr.key') ?: System.getenv('GITHUB_TOKEN') ?: '').toString()

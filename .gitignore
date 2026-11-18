@@ -4,3 +4,6 @@
 *.iml
 local.properties
 **/build/
+node_modules/
+package-lock.json
+.release-maven/
