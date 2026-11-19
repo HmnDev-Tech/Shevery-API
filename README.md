@@ -118,6 +118,30 @@ IBinder rawBinder = SheveryPrivilege.getSystemService("package");
 IPackageManager pm = IPackageManager.Stub.asInterface(rawBinder);
 ```
 
+## Github Workflows
+
+### 1. Releases
+
+Pushes to `main` and `dev` use conventional commits to determine the next
+version. `main` releases are stable and update `manifest.gradle`.
+Both publish to the `maven` branch and GitHub Packages, then create a GitHub
+release. The Maven branch retains older versions.
+The release script publishes the `aidl`, `shared`, `api`, and `provider`
+modules; add any new publishable modules to that list.
+
+Publishing is not atomic across GitHub Packages, the Maven branch, and GitHub
+Releases. If publishing fails after a tag is created, inspect the failed run and
+the three destinations before repairing or retrying the affected publication;
+rerunning semantic-release alone will not republish an already tagged version.
+
+### 2. Forks
+
+Before enabling the workflow, create `dev` and `maven` in the repository,
+populate `maven` with the existing Maven repository, and import the existing
+`vX.Y.Z` release tags into the repository. The latest reachable tag must
+represent the last published release else version on fork will not match main
+repo.
+
 ## Credits & Acknowledgements
 
 Shevery-API builds upon the Android privileged IPC ecosystem and incorporates architectural and security improvements from the following projects:

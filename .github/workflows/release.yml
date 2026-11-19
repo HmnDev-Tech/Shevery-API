@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    branches:
+    - main
+    - dev
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  queue: max
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    if: github.ref_name == 'main' || github.ref_name == 'dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Check out Maven branch
+        uses: actions/checkout@v7
+        with:
+          ref: maven
+          path: .release-maven
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Install release tools
+        run: npm install --no-package-lock --ignore-scripts
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_REPOSITORY_DIR: ${{ github.workspace }}/.release-maven
+        run: npx semantic-release
+

@@ -1,0 +1,40 @@
+name: Sync main to dev
+
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows:
+      - Release
+    branches:
+      - main
+    types:
+      - completed
+
+concurrency:
+  group: sync-dev
+  queue: max
+
+permissions:
+  contents: write
+
+jobs:
+  sync-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: dev
+          fetch-depth: 0
+      - name: Merge main into dev
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "dev already contains main"
+            exit 0
+          fi
+          git merge --no-ff --no-edit origin/main
+          git push origin HEAD:dev
